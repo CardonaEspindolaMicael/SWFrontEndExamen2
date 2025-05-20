@@ -5,7 +5,6 @@ import { useEffect, useState, useRef } from 'react';
 import { useSocketContext } from '../../context/socketContext';
 import { useNavigate, useParams } from 'react-router';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import { figuresGrape } from './Components/blocks/figures';
 import { sectors } from './Components/styleManager';
 import { panels, updateFigures } from './Components/panels';
 import { setupPageManager } from './UI/setupAndRefresh.js';
@@ -13,12 +12,10 @@ import { setupRealTimeCollaboration } from './Sockets/realTimeColab.js';
 import { EditorContainer } from './UI/EditorContainer.jsx';
 import sdk from '@stackblitz/sdk';
 import { fetchAIResponse } from './Func/aiResponse.js';
-import { generateAngularFiles } from './Func/exportToAngular.js';
 import { ArtificialModal } from './UI/ArtificialModal.jsx';
 import { DiagramHeader } from './Layout/DiagramHeader.jsx';
 import { ApiRequests } from '../../api/ApiRequests.js';
-
-
+import { updateStackblitzProject } from './Func/stackBlitz.js';
 
 export default function AppGraph2() {
   const contextSocket = useSocketContext();
@@ -27,7 +24,7 @@ export default function AppGraph2() {
   const [aiResponse, setAiResponse] = useState('Cargando respuesta...');
   const [stackblitzInitialized, setStackblitzInitialized] = useState(false);
   const [stackblitzVM, setStackblitzVM] = useState(null);
-  const [roomData, setRoomData] = useState(null); // Add state for room data
+  const [roomData, setRoomData] = useState(null); 
   const { room } = useParams();
   const currentUser = useAuthUser();
   const navigate = useNavigate();
@@ -177,41 +174,6 @@ useEffect(() => {
     }
   }, [editor, contextSocket, room, currentUser]);
 
-  // Función para actualizar el proyecto de StackBlitz con nuevas páginas
-  const updateStackblitzProject = async () => {
-    // Your existing code...
-    if (!editor) return;
-    
-    // Obtener todas las páginas del editor
-    const pages = editor.Pages.getAll();
-    
-    // Extraer información de cada página
-    const pagesData = [];
-    
-    // Por cada página, obtener su HTML
-    for (const page of pages) {
-      // Seleccionar la página actual para obtener su HTML
-      editor.Pages.select(page.id);
-      
-      // Obtener nombre y contenido HTML
-      pagesData.push({
-        id: page.id,
-        name: page.get('name'),
-        html: editor.getHtml()
-      });
-    }
-    
-    // Volver a la página original
-    const currentPage = editor.Pages.getSelected();
-    if (currentPage) {
-      editor.Pages.select(currentPage.id);
-    }
-    
-    // Generar archivos Angular con las páginas
-    const generatedFiles = generateAngularFiles(pagesData);
-    
-    return { files: generatedFiles, pagesData };
-  };
 
   // useEffect for StackBlitz...
   useEffect(() => {
@@ -219,7 +181,7 @@ useEffect(() => {
       const initializeStackblitz = async () => {
         try {
           // Generar proyecto Angular
-          const { files, pagesData } = await updateStackblitzProject();
+          const { files, pagesData } = await updateStackblitzProject(editor);
           
           // Cargar StackBlitz SDK con los archivos generados
           const vm = await sdk.embedProject(
@@ -259,14 +221,13 @@ useEffect(() => {
     }
   }, [showIframe, stackblitzInitialized, editor]);
 
-  // Your existing handleRunAI function...
   const handleRunAI = async () => {
     if (stackblitzInitialized && stackblitzVM) {
       // Si ya está inicializado, actualizar el proyecto
       try {
         setAiResponse('Actualizando proyecto Angular con nuevas páginas...');
         
-        const { files, pagesData } = await updateStackblitzProject();
+        const { files, pagesData } = await updateStackblitzProject(editor);
         
         // Actualizar archivos en StackBlitz
         await stackblitzVM.applyFsDiff({
