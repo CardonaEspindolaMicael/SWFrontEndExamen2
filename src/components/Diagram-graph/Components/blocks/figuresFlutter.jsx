@@ -130,6 +130,92 @@ export const figuresFlutter= [
   </div>`,
   }, 
 
+
+  {
+    id: 'button1',
+    label: '<b>button</b>',
+    category: 'Botones',
+    attributes: { class: 'gjs-block-section' },
+    content: ` <button
+  class="
+    inline-flex items-center justify-center
+    px-6 py-2.5             /* ancho y alto (~36px) */
+    bg-blue-500            /* color primario exacto */
+    text-white              /* texto en blanco */
+    font-medium text-sm      /* peso y tamaño de fuente */
+    rounded-md               /* esquinas redondeadas (6px) */
+    shadow-md                /* elevación sutil */
+  "
+>
+  Elevated button
+</button>`,
+  }, 
+
+  {
+    id: 'button2',
+    label: '<b>button</b>',
+    category: 'Botones',
+    attributes: { class: 'gjs-block-section' },
+    content: ` <button
+  class="
+    inline-flex items-center justify-center
+    px-6 py-2.5               /* ~36px alto, espacio horizontal */
+    bg-transparent            /* fondo transparente */
+    text-[#4089FE]            /* texto en tu azul exacto */
+    border border-[#4089FE]   /* borde sólido 1px con el mismo color */
+    font-medium text-sm       /* peso medio, tamaño pequeño */
+    rounded-md                /* esquinas de 6px */
+    shadow-none               /* sin elevación */
+  "
+>
+  Outlined Button
+</button>`,
+  }, 
+  {
+    id: 'grip',
+    label: '<b>stack</b>',
+    category: 'Botones',
+    attributes: { class: 'gjs-block-section' },
+    content: ` <div
+  class="
+    flex flex-col justify-between
+    h-[200px] w-full
+    bg-[var(--md-sys-color-surface)]
+    p-4
+    rounded-lg
+    shadow-[var(--md-sys-elevation-level1)]
+  "
+>
+  <!-- 1) Top: bloque de 60px de alto con Primary Container -->
+  <div class="h-[60px]
+              bg-[var(--md-sys-color-primary-container)]
+              rounded-md">
+  </div>
+
+  <!-- 2) Center: texto centrado -->
+  <div class="text-[var(--md-sys-color-on-surface)]
+              text-center
+              font-semibold
+              text-lg">
+    Column Center
+  </div>
+
+  <!-- 3) Bottom-right: badge con Secondary Container -->
+  <div class="self-end">
+    <div class="
+      bg-[var(--md-sys-color-secondary-container)]
+      text-[var(--md-sys-color-on-secondary-container)]
+      px-3 py-1
+      rounded
+      shadow-sm
+      text-sm
+    ">
+      Badge
+    </div>
+  </div>
+</div>`,
+  }, 
+
   
 
 
