@@ -1,0 +1,190 @@
+/* Estilo general del contenedor del editor */
+.editor-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  height: calc(100vh - 40px);
+}
+
+/* Canvas principal */
+.editor-canvas {
+  flex-grow: 1;
+  background-color: #fff;
+  border-right: 1px solid #ccc;
+}
+
+/* Panel derecho */
+.panel__right {
+  flex-basis: 230px;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+  border-left: 1px solid #ddd;
+}
+
+/* Paneles internos */
+.pages-panel,
+.layers-panel,
+.styles-panel,
+.traits-panel,
+.blocks-panel {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Encabezados de sección */
+.pages-panel h4,
+.layers-panel h4,
+.styles-panel h4,
+.traits-panel h4,
+.blocks-panel h4 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Botón para añadir páginas */
+.add-page-btn {
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+  background-color: #4b91e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.add-page-btn:hover {
+  background-color: #3a80d1;
+}
+
+/* Lista de páginas */
+#pages-list {
+  max-height: 150px;
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+/* Estilo de ítems de página */
+.page-item {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  transition: background-color 0.2s ease;
+}
+.page-item:hover {
+  background-color: #f0f0f0;
+}
+.page-item.selected {
+  background-color: #e0e0e0;
+}
+.page-item-name {
+  flex-grow: 1;
+}
+.page-item-actions {
+  display: flex;
+}
+.page-action-btn {
+  margin-left: 5px;
+  color: #555;
+  cursor: pointer;
+}
+.page-action-btn:hover {
+  color: #000;
+}
+
+/* HTML Viewer */
+#html-viewer {
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f7f7f7;
+  border-radius: 4px;
+  max-height: 300px;
+  overflow: auto;
+  font-family: monospace;
+  font-size: 12px;
+}
+
+/* Estilos GrapesJS y reset */
+#gjs {
+  border: 1px solid #444;
+}
+.gjs-cv-canvas {
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.gjs-block {
+  width: auto;
+  height: auto;
+  min-height: auto;
+}
+.gjs-sm-sector__decoraciones,
+.gjs-blocks-cs > *,
+.gjs-sm-sectors,
+.gjs-one-bg {
+  color: black;
+  background-color: #fff;
+}
+
+/* Paneles de dispositivos y switcher */
+.panel__devices,
+.panel__switcher {
+  position: initial;
+}
+
+/* BOTÓN HAMBURGUESA */
+.hamburger-btn {
+  display: none;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  padding: 8px 12px;
+  font-size: 20px;
+  background-color: #4b91e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.hamburger-btn:hover {
+  background-color: #3a80d1;
+}
+
+/* PANEL DERECHO */
+.panel__right {
+  flex-basis: 230px;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+  border-left: 1px solid #ddd;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* RESPONSIVO: ocultamos el panel y mostramos hamburguesa */
+@media (max-width: 768px) {
+  .panel__right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    transform: translateX(100%);
+    z-index: 999;
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  }
+
+  .panel__right.visible {
+    transform: translateX(0);
+  }
+
+  .hamburger-btn {
+    display: block;
+  }
+}
