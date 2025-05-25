@@ -10,6 +10,7 @@ import AppGraph from "./components/Diagram-graph/AppGraph.jsx";
 import AppGraph2 from "./components/Diagram-graph/AppGraph2.jsx";
 import { usuarioColaborador } from "./router/validations/usuarioColaborador.js";
 import { ErrorPage } from "./router/validations/ErrorPage.jsx";
+import { TestVista } from "./view/TestVista.jsx";
 
 
 
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
   },
   { path: "/login", element: <Login /> },
   { path: "/registro", element: <NuevoUsuario /> },
+    { path: "/test", element: <TestVista/> },
   { path: "*", element: <NotFound /> },
 ]);
 

@@ -5,6 +5,8 @@ import { UsersModal } from "./UsersModal";
 import { saveDiagram } from "../Func/saveDiagram";
 import Swal from "sweetalert2";
 import { GeminiImageModal } from "./GeminiImageModal";
+import { useFlutterFigures } from "../Components/panels";
+import { flutterCodeMobile } from "../Func/flutterFunctions";
 // Versión actualizada del DiagramHeader con funcionalidad de invitación
 export const DiagramHeader = ({ handleRunAI, editor, room, salirSala, currentUser }) => {
 
@@ -78,8 +80,8 @@ export const DiagramHeader = ({ handleRunAI, editor, room, salirSala, currentUse
                   {/* Nuevo botón Guardar Diagrama */}
                   <button
                     className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-                    onClick={async ()=>{
-                      await saveDiagram(editor,room)
+                    onClick={async () => {
+                      await saveDiagram(editor, room)
                     }}
                   >
                     <svg
@@ -119,7 +121,7 @@ export const DiagramHeader = ({ handleRunAI, editor, room, salirSala, currentUse
                   </button>
                   <button
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-                    onClick={   () => {
+                    onClick={() => {
                       Swal.fire({
                         title: '¿Estás seguro?',
                         text: '¿Quieres exportar y compilar el proyecto?',
@@ -131,7 +133,12 @@ export const DiagramHeader = ({ handleRunAI, editor, room, salirSala, currentUse
                         cancelButtonText: 'Cancelar'
                       }).then((result) => {
                         if (result.isConfirmed) {
-                          handleRunAI();
+                          if (!useFlutterFigures) {
+                            handleRunAI();
+                          } else{
+                            flutterCodeMobile(editor);
+                          }
+
                         }
                       });
                     }}
@@ -148,7 +155,7 @@ export const DiagramHeader = ({ handleRunAI, editor, room, salirSala, currentUse
 
                   <button
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-                    onClick={   () => {
+                    onClick={() => {
                       Swal.fire({
                         title: '¿Estás seguro?',
                         text: '¿Quieres generar desde una imagen?',
@@ -197,28 +204,28 @@ export const DiagramHeader = ({ handleRunAI, editor, room, salirSala, currentUse
                 </>
               ) : null}
 
-<button
-                    className="w-40 inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                    onClick={() =>Swal.fire({
-                      title: `La url es: ${window.location.href}`,
-                      showClass: {
-                        popup: `
+              <button
+                className="w-40 inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                onClick={() => Swal.fire({
+                  title: `La url es: ${window.location.href}`,
+                  showClass: {
+                    popup: `
                           animate__animated
                           animate__fadeInUp
                           animate__faster
                         `
-                      },
-                      hideClass: {
-                        popup: `
+                  },
+                  hideClass: {
+                    popup: `
                           animate__animated
                           animate__fadeOutDown
                           animate__faster
                         `
-                      }
-                    })}
-                  >
-                    Invitacion Url
-                  </button>
+                  }
+                })}
+              >
+                Invitacion Url
+              </button>
 
               <button
                 className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
@@ -244,8 +251,8 @@ export const DiagramHeader = ({ handleRunAI, editor, room, salirSala, currentUse
                 <>
                   <button
                     className="w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                    onClick={async()=>{
-                      await saveDiagram(editor,room)
+                    onClick={async () => {
+                      await saveDiagram(editor, room)
                     }}
                   >
                     Guardar Diagrama
@@ -261,7 +268,7 @@ export const DiagramHeader = ({ handleRunAI, editor, room, salirSala, currentUse
 
                   <button
                     className="w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                    onClick={() =>Swal.fire({
+                    onClick={() => Swal.fire({
                       title: `La url es: ${window.location.href}`,
                       showClass: {
                         popup: `
@@ -309,11 +316,11 @@ export const DiagramHeader = ({ handleRunAI, editor, room, salirSala, currentUse
         isHost={isHost}
       />
 
-<GeminiImageModal 
-  editor={editor} 
-  isOpen={isGeminiModalOpen} 
-  onClose={() => setIsGeminiModalOpen(false)}
-/>
+      <GeminiImageModal
+        editor={editor}
+        isOpen={isGeminiModalOpen}
+        onClose={() => setIsGeminiModalOpen(false)}
+      />
     </>
   );
 };

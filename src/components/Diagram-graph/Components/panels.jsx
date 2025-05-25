@@ -4,9 +4,9 @@ import { figuresGrape } from "./blocks/figures";
 import { figuresFlutter } from "./blocks/figuresFlutter";
 
 // State to track which figure set to use - we'll modify this via commands
-let useFlutterFigures = false;
+export let useFlutterFigures = false;
 
-// Function to update the blocks in the editor
+// Function to update the blocks in the editor 
 export function updateFigures(editor) {
   const figures = useFlutterFigures ? figuresFlutter : figuresGrape;
   
