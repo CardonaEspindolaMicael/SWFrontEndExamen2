@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import  {  useEffect, useState } from 'react';
 import { ApiRequests } from '../../api/ApiRequests.js';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import { CardRoom } from './CardRoom.jsx';
 import CrearSalaModal from './CrearSalaModal.jsx';
-import Swal from 'sweetalert2';
-import { UserDataContext } from '../../context/userData/UserDataContext.js';
 import { useNavigate } from 'react-router-dom';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
 
@@ -14,9 +12,6 @@ const RoomManager = () => {
   const user = useAuthUser();
   const [showModal, setShowModal] = useState(false);
   const currentUser = useAuthUser();
-  const [invitaciones, setInvitaciones] = useState([]);
-  const { state } = useContext(UserDataContext);
-  const invitacion = state.invitacion;
   const navigate = useNavigate();
   const signOut = useSignOut();
   
@@ -48,24 +43,7 @@ const RoomManager = () => {
     navigate("/login");
   };
 
-  useEffect(() => {
-    if (invitacion) {
-      setInvitaciones(invitacion);
-    }
-  }, [invitacion]);
 
-  useEffect(() => {
-    if (invitaciones.length > 0) {
-      Swal.fire({
-        title: 'Invitaciones',
-        text: `Haz sido invitado a una sala`,
-        icon: 'info',
-        confirmButtonText: 'Aceptar',
-      }).then(() => {
-        window.location.href = invitaciones;
-      });
-    }
-  }, [invitaciones, navigate]);
 
   const handleCreateRoomClick = () => {
     setShowModal(true);

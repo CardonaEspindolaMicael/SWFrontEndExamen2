@@ -3,8 +3,6 @@ import { createContext } from 'react';
 import { useSocket } from '../hooks/useSocket';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import { UserDataContext } from './userData/UserDataContext.js';
-import { types } from '../type/types.js';
-
 export const SocketContext = createContext(); 
 
 export const SocketProvider = ({ children }) => {
