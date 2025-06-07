@@ -30,11 +30,12 @@ async function postCommon(endpoint,values){
 
   try {
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('_auth')}`;
-    await axios.post(
+    const value =await axios.post(
       
       process.env.REACT_APP_BASE_URL+endpoint,
       values
     );
+    return value
   } catch (error) {
     return error ;
   }
@@ -93,6 +94,34 @@ async function deleteCommon(endpoint){
 }
 
 
+ async function postZipDownload(endpoint, payload, filename = 'flutter_project.zip') {
+  try {
+    const response = await axios.post(process.env.REACT_APP_BASE_URL+endpoint, payload, {
+      responseType: 'blob',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const blob = new Blob([response.data], { type: 'application/zip' });
+    const downloadUrl = window.URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = filename;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    window.URL.revokeObjectURL(downloadUrl);
+  } catch (error) {
+    console.error('Error al descargar el ZIP:', error);
+    throw error;
+  }
+}
+
+
 export const ApiRequests={
   getByIdCommon, 
   getCommon, 
@@ -100,5 +129,6 @@ export const ApiRequests={
   putCommon,
   deleteCommon,
   postCommonHC,
-  postGeminiImage
+  postGeminiImage,
+  postZipDownload
 }
