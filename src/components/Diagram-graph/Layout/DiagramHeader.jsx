@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ApiRequests } from "../../../api/ApiRequests";
 import { InviteModal } from "./InviteModal";
 import { UsersModal } from "./UsersModal";
@@ -7,7 +7,8 @@ import Swal from "sweetalert2";
 import { GeminiImageModal } from "./GeminiImageModal";
 import { useFlutterFigures } from "../Components/panels";
 import { flutterCodeMobile } from "../Func/flutterFunctions";
-// Versión actualizada del DiagramHeader con funcionalidad de invitación
+import { ChatModal } from "./chatModal";
+
 export const DiagramHeader = ({ handleRunAI, editor, room, salirSala, currentUser }) => {
 
   const [isHost, setIsHost] = useState(null);
@@ -15,6 +16,8 @@ export const DiagramHeader = ({ handleRunAI, editor, room, salirSala, currentUse
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [usersModalOpen, setUsersModalOpen] = useState(false);
   const [isGeminiModalOpen, setIsGeminiModalOpen] = useState(false);
+  const [isChatModal, setIsChatModal] = useState(false);
+    const chatRef = useRef(null); // <- Este es el ref
 
   useEffect(() => {
     const checkHost = async () => {
@@ -29,7 +32,23 @@ export const DiagramHeader = ({ handleRunAI, editor, room, salirSala, currentUse
 
     checkHost();
   }, [room, currentUser.ci]);
+useEffect(() => {
+    function handleClickOutside(event) {
+      if (chatRef.current && !chatRef.current.contains(event.target)) {
+        setIsChatModal(false);
+      }
+    }
 
+    if (isChatModal) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isChatModal]);
   if (isHost === null) {
     return <div className="p-4 text-gray-600">Cargando encabezado...</div>;
   }
@@ -135,7 +154,7 @@ export const DiagramHeader = ({ handleRunAI, editor, room, salirSala, currentUse
                         if (result.isConfirmed) {
                           if (!useFlutterFigures) {
                             handleRunAI();
-                          } else{
+                          } else {
                             flutterCodeMobile(editor);
                           }
 
@@ -240,6 +259,35 @@ export const DiagramHeader = ({ handleRunAI, editor, room, salirSala, currentUse
                 </svg>
                 Salir
               </button>
+
+                   <div className="relative" ref={chatRef}>
+          <button
+            className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+            onClick={() => setIsChatModal(!isChatModal)}
+          >
+            <svg
+              className="h-5 w-5 mr-1.5 text-gray-500"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v12l-4-4H4a2 2 0 01-2-2V5z" />
+            </svg>
+            Chat
+          </button>
+
+          {isChatModal && (
+            <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-300 rounded-md shadow-lg z-50">
+             
+      <ChatModal
+        isOpen={isChatModal}
+        currentUser={currentUser}
+        onClose={() => setIsChatModal(false)}
+        room={room}
+        editor={editor}
+      />
+            </div>
+          )}
+        </div>
             </div>
           </div>
 
@@ -321,6 +369,7 @@ export const DiagramHeader = ({ handleRunAI, editor, room, salirSala, currentUse
         isOpen={isGeminiModalOpen}
         onClose={() => setIsGeminiModalOpen(false)}
       />
+
     </>
   );
 };

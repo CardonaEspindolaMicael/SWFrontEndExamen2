@@ -7,7 +7,7 @@ export const flutterCodeMobile = async (editor) => {
   // Mostrar alerta de carga
   Swal.fire({
     title: 'Generando código Flutter...',
-    text: 'Por favor espera mientras se convierte el HTML a Dart',
+    text: 'Por favor espera mientras se genera el codigo Dart',
     allowOutsideClick: false,
     didOpen: () => {
       Swal.showLoading();

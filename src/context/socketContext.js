@@ -3,12 +3,13 @@ import { createContext } from 'react';
 import { useSocket } from '../hooks/useSocket';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import { UserDataContext } from './userData/UserDataContext.js';
+
 export const SocketContext = createContext(); 
 
 export const SocketProvider = ({ children }) => {
-    const { socket, online, conectarSocket, desconectarSocket } = useSocket( process.env.REACT_APP_VITE_BASE_URL_SOCKET);
+    const { socket, online, conectarSocket, desconectarSocket } = useSocket(process.env.REACT_APP_VITE_BASE_URL_SOCKET);
     let isAuthenticated = useIsAuthenticated();
-    const {dispatch} = useContext(UserDataContext);
+    const { dispatch } = useContext(UserDataContext);
 
     useEffect(() => {
         console.log(isAuthenticated)
@@ -23,6 +24,7 @@ export const SocketProvider = ({ children }) => {
         }
     }, [desconectarSocket, isAuthenticated]);
 
+    // Funciones existentes
     const joinRoom = useCallback((room) => {
         if (socket) {
             socket.emit('join-room', room);
@@ -37,7 +39,7 @@ export const SocketProvider = ({ children }) => {
 
     const updateDiagram = useCallback((data, room) => {
         if (socket) {
-            socket.emit('diagram-update', data, room);  // El `data` ahora incluye `{ action, cell }`
+            socket.emit('diagram-update', data, room);
         }
     }, [socket]);
 
@@ -58,6 +60,7 @@ export const SocketProvider = ({ children }) => {
             socket.on('user-update', callback);
         }
     }, [socket]);
+
     const offUserPageStateUpdate = useCallback((callback) => {
         if (socket) {
             socket.off('user-update', callback);
@@ -70,20 +73,99 @@ export const SocketProvider = ({ children }) => {
         }
     }, [socket]);
 
+    // **NUEVAS FUNCIONES PARA CHAT IA**
+    const joinAiChat = useCallback((room) => {
+        if (socket) {
+            socket.emit('join-ai-chat', room);
+        }
+    }, [socket]);
 
+    const leaveAiChat = useCallback((room) => {
+        if (socket) {
+            socket.emit('leave-ai-chat', room);
+        }
+    }, [socket]);
+
+    const sendAiMessage = useCallback((room, message, htmlCode = '') => {
+        if (socket) {
+            socket.emit('send-ai-message', { room, message, htmlCode });
+        }
+    }, [socket]);
+
+    // Listeners para mensajes del chat IA
+    const onUserMessage = useCallback((callback) => {
+        if (socket) {
+            socket.on('user-message', callback);
+        }
+    }, [socket]);
+
+    const offUserMessage = useCallback((callback) => {
+        if (socket) {
+            socket.off('user-message', callback);
+        }
+    }, [socket]);
+
+    const onAiMessage = useCallback((callback) => {
+        if (socket) {
+            socket.on('ai-message', callback);
+        }
+    }, [socket]);
+
+    const offAiMessage = useCallback((callback) => {
+        if (socket) {
+            socket.off('ai-message', callback);
+        }
+    }, [socket]);
+
+    const onAiTyping = useCallback((callback) => {
+        if (socket) {
+            socket.on('ai-typing', callback);
+        }
+    }, [socket]);
+
+    const offAiTyping = useCallback((callback) => {
+        if (socket) {
+            socket.off('ai-typing', callback);
+        }
+    }, [socket]);
+
+    const onAiChatError = useCallback((callback) => {
+        if (socket) {
+            socket.on('ai-chat-error', callback);
+        }
+    }, [socket]);
+
+    const offAiChatError = useCallback((callback) => {
+        if (socket) {
+            socket.off('ai-chat-error', callback);
+        }
+    }, [socket]);
 
     return (
         <SocketContext.Provider value={{
             socket,
             online,
+            // Funciones existentes
             updateDiagram,
             onDiagramUpdate,
             offDiagramUpdate,
             joinRoom,
             leaveRoom,
             updateUserPageState,
-            offUserPageStateUpdate ,
-            requestPageData
+            offUserPageStateUpdate,
+            requestPageData,
+            // Nuevas funciones para chat IA
+            joinAiChat,
+            leaveAiChat,
+            sendAiMessage,
+            onUserMessage,
+            offUserMessage,
+            onAiMessage,
+            offAiMessage,
+            onAiTyping,
+            offAiTyping,
+            onAiChatError,
+            offAiChatError
         }}>
             {children}
         </SocketContext.Provider>
