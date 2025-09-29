@@ -36,7 +36,7 @@ export const flutterCodeMobile = async (editor) => {
 
     // ✅ 1. Primer endpoint: Generar código Dart desde HTML
     const dataDart = await ApiRequests.postCommon(
-      '/ai-gemini/html-to-dart/AIzaSyCSE5rW6Qn9JsIoCXGkgdYeGP3QHSP4lho',
+      '/ai-gemini/html-to-dart/AIzaSyBNfTJls61c3rsCrs4lbl745w4cxnWN6Fc',
       { htmlCode: pagesData }
     );
 

@@ -198,6 +198,7 @@ export const ChatModal = ({ isOpen, onClose, room, currentUser, editor }) => {
                 sender: 'ai',
                 text: data.text,
                 newHtml: data.newHtml,
+                aiEyes:data.aiEyes,
                 timestamp: data.timestamp
             }]);
             setAiTyping(false);
